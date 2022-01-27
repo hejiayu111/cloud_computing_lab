@@ -4,6 +4,8 @@ import DataSourceMock.RepositoryDataSource;
 import Model.Customer;
 import Model.Transaction;
 import Model.TransactionType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TransactionRepository {
 
@@ -15,6 +17,11 @@ public class TransactionRepository {
 
     public Transaction getTransactionById(int id) {
         return repositoryDataSource.id2TransactionMap.get(id);
+    }
+
+    public String getTransactionById2String(int id) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(getTransactionById(id));
     }
 
     public void upsertCustomer(Transaction transaction) {
