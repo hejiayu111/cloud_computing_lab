@@ -5,11 +5,22 @@ import Model.Account;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class AccountRepository {
     private RepositoryDataSource repositoryDataSource;
 
-    public AccountRepository (RepositoryDataSource repositoryDataSource) {
+    private void insertTestData(String dataPath) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        InputStream is = Account.class.getResourceAsStream(dataPath);
+        Account account = mapper.readValue(is, Account.class);
+        this.upsertAccount(account);
+    }
+
+    public AccountRepository (RepositoryDataSource repositoryDataSource) throws IOException {
         this.repositoryDataSource = repositoryDataSource;
+        insertTestData("/accountTestData.json");
     }
 
     public Account getAccountById(int id) {

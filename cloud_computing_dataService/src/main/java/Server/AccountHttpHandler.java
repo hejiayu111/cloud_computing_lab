@@ -18,6 +18,9 @@ public class AccountHttpHandler implements HttpHandler {
     private final AccountRepository accountRepository = new AccountRepository(new RepositoryDataSource());
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    public AccountHttpHandler() throws IOException {
+    }
+
 
     public Map<String, String> queryToMap(String query) {
         if(query == null) {
