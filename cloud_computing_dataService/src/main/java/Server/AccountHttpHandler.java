@@ -3,15 +3,17 @@ package Server;
 import DataSourceMock.RepositoryDataSource;
 import Model.Account;
 import Repository.AccountRepository;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class AccountHttpHandler implements HttpHandler {
 
@@ -47,6 +49,9 @@ public class AccountHttpHandler implements HttpHandler {
             String id = queryMap.get("id");
             Account account = accountRepository.getAccountById(Integer.parseInt(id));
             response = objectMapper.writeValueAsString(account);
+        } else if (httpExchange.getRequestMethod().equals("POST")) {
+            Headers headers = httpExchange.getRequestHeaders();
+            Set<Map.Entry<String, List<String>>> entries = headers.entrySet();
         }
 
         httpExchange.getResponseHeaders().set("Content-Type", "application/json");

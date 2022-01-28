@@ -1,12 +1,18 @@
 package Repository;
 
 import DataSourceMock.RepositoryDataSource;
+import DataSourceMock.RDSDataSource;
+
 import Model.Account;
+import Model.AccountStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AccountRepository {
     private RepositoryDataSource repositoryDataSource;
@@ -18,13 +24,26 @@ public class AccountRepository {
         this.upsertAccount(account);
     }
 
-    public AccountRepository (RepositoryDataSource repositoryDataSource) throws IOException {
+    public AccountRepository(RepositoryDataSource repositoryDataSource) throws IOException {
         this.repositoryDataSource = repositoryDataSource;
-        insertTestData("/accountTestData.json");
+        // insertTestData("/accountTestData.json");
     }
 
     public Account getAccountById(int id) {
-        return repositoryDataSource.id2AccountMap.get(id);
+        Account account = null;
+        try {
+            PreparedStatement statement = RDSDataSource.newPreparedStatement("select * from Account where id = ?");
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            AccountStatus status = AccountStatus.values()[rs.getInt(4)];
+            account = new Account(rs.getInt(1), rs.getString(2), rs.getDouble(3), status);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return account;
     }
 
     public String getAccountById2String(int id) throws JsonProcessingException {
