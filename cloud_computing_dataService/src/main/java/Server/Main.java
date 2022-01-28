@@ -18,6 +18,7 @@ public class Main {
             ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
             server.setExecutor(threadPoolExecutor);
             server.createContext("/account", new AccountHttpHandler());
+            server.createContext("/customer", new CustomerHttpHandler());
             server.start();
         } catch (IOException exception) {
             exception.printStackTrace();
