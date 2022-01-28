@@ -1,0 +1,6 @@
+{
+  "id": 1,
+  "firstName": "foo",
+  "lastName": "bar",
+  "associatedAccountNumber": "123456789"
+}
