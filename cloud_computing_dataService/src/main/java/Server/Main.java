@@ -14,6 +14,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            System.out.println("launching the server...");
             HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 8080), 0);
             ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
             server.setExecutor(threadPoolExecutor);
